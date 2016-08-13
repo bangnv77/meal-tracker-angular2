@@ -2,7 +2,7 @@ import { Component } from 'angular2/core';
 import { Food } from './food.model';
 
 @Component({
-  template: 'food-display',
+  selector: 'food-display',
   inputs: ['foods'],
   template: `
     <div>

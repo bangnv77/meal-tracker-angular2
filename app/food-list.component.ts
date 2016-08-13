@@ -20,9 +20,11 @@ export class FoodListComponent {
   public selectedFood: Food;
 
   constructor() {
-    foodClicked(clickedFood: Food) {
-      this.selectedFood = clickedFood;
-      console.log(this.selectedFood);
-    }
+
+  }
+
+  foodClicked(clickedFood: Food){
+    this.selectedFood = clickedFood;
+    console.log(this.selectedFood);
   }
 }
