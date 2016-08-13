@@ -2,6 +2,7 @@ import { Component } from 'angular2/core';
 import { Food } from './food.model';
 import { FoodListComponent } from './food-list.component';
 
+
 @Component({
   selector: 'my-app',
   directives: [FoodListComponent],
