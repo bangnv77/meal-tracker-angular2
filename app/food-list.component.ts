@@ -5,11 +5,10 @@ import { AddFoodComponent } from './add-food.component';
 import { EditFoodComponent } from './edit-food.component';
 import { CaloriePipe } from './calories.pipe';
 
-
 @Component({
   selector: 'food-list',
   inputs: ['foods'],
-  outputs: ['onFoodSelect'],
+
   directives: [FoodComponent, AddFoodComponent, EditFoodComponent],
   pipes: [CaloriePipe],
   template: `
@@ -38,9 +37,9 @@ import { CaloriePipe } from './calories.pipe';
       </form>
     </div>
     <div class="">
-      <h4>Total calories = {{ countCalories() }}</h4>
-        <h4>Foods Added</h4>
-        <food-display *ngFor="#currentFood of foods | calorie: calorieLevelProperty: calorieOperandProperty" [food]="currentFood" (click)="foodClicked(currentFood)" ></food-display>
+      <h4>Foods Added</h4>
+      <h4>Total calories for displayed foods = {{ countCalories(foods | calorie: calorieLevelProperty: calorieOperandProperty) }}</h4>
+      <food-display *ngFor="#currentFood of foods | calorie: calorieLevelProperty: calorieOperandProperty" [food]="currentFood" (click)="foodClicked(currentFood)" ></food-display>
     </div>
     <edit-food *ngIf="selectedFood" [food]="selectedFood"></edit-food>
   `
@@ -48,12 +47,12 @@ import { CaloriePipe } from './calories.pipe';
 export class FoodListComponent {
   public foods: Food[];
   public selectedFood: Food;
-  public onFoodSelect: EventEmitter<Food>;
+
   public calorieLevelProperty: number = 500;
   public calorieOperandProperty: string = "all";
 
   constructor(){
-    this.onFoodSelect =  new EventEmitter();
+
   }
 
   foodClicked(clickedFood: Food) {
@@ -75,9 +74,9 @@ export class FoodListComponent {
     this.calorieLevelProperty = parseInt(filterOption);
   }
 
-  countCalories() {
+  countCalories(foods: Food[]) {
     var totalCalories: number = 0;
-    this.foods.forEach(function(item) {
+    foods.forEach(function(item) {
       totalCalories += item.calories;
     })
     return totalCalories;
