@@ -1,4 +1,4 @@
-import { Component } from 'angular2/core';
+import { Component, EventEmitter } from 'angular2/core';
 import { Food } from './food.model';
 import { FoodComponent } from './food.component';
 import { AddFoodComponent } from './add-food.component';
@@ -8,30 +8,48 @@ import { CaloriePipe } from './calories.pipe';
 
 @Component({
   selector: 'food-list',
-  directives: [FoodComponent, AddFoodComponent, EditFoodComponent],
   inputs: ['foods'],
+  outputs: ['onFoodSelect'],
+  directives: [FoodComponent, AddFoodComponent, EditFoodComponent],
   pipes: [CaloriePipe],
   template: `
-    <select (change)="onOperandChange($event.target.value)">
-      <option value="all">Show All</option>
-      <option value="less">Show Low Calorie Foods</option>
-      <option value="greater">Show Hig Calorie Foods</option>
-    </select>
+    <div class="container">
+      <add-food (onSubmit)="createFood($event)" ></add-food>
+    </div>
+    <div class="container">
+      <h4>Filter Options</h4>
+      <label for="calorie-category">Filter by Calorie Type</label>
+      <select (change)="onOperandChange($event.target.value)">
+        <option value="all">Show All</option>
+        <option value="less">Show Low Calorie Foods</option>
+        <option value="greater">Show Hig Calorie Foods</option>
+      </select>
+      <label for="calorie-amount">Number of Calories</label>
+      <select (change)="onCalorieChange($event.target.value)" id="calorie-amount">
+        <option value="100">100 Calories</option>
+        <option value="200">200 Calories</option>
+        <option value="300">300 Calories</option>
+        <option value="400">400 Calories</option>
+        <option value="500" selected>500 Calories</option>
+        <option value="600">600 Calories</option>
+        <option value="700">700 Calories</option>
+      </select>
+    </div>
     <div class="container">
       <food-display *ngFor="#currentFood of foods | calorie:calorieLevelProperty:calorieOperandProperty" [food]="currentFood" (click)="foodClicked(currentFood)" ></food-display>
     </div>
     <edit-food *ngIf="selectedFood" [food]="selectedFood"></edit-food>
-    <add-food (onSubmit)="createFood($event)" ></add-food>
   `
 })
 export class FoodListComponent {
   public foods: Food[];
   public selectedFood: Food;
+  public onFoodSelect: EventEmitter<Food>;
   public calorieLevelProperty: number = 500;
   public calorieOperandProperty: string = "all";
 
   constructor(){
-
+    this.onFoodSelect =  new EventEmitter();
   }
 
   foodClicked(clickedFood: Food) {
@@ -46,5 +64,10 @@ export class FoodListComponent {
 
   onOperandChange(filterOption: string) {
     this.calorieOperandProperty = filterOption;
+    console.log(this.calorieLevelProperty);
+  }
+
+  onCalorieChange(filterOption) {
+    this.calorieLevelProperty = parseInt(filterOption);
   }
 }
